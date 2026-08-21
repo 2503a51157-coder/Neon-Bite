@@ -1,0 +1,4331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeonBite | Food Delivery</title>
+
+<style>
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8f8f8;
+    color: #202124;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 29px;
+    font-weight: 900;
+    color: #ff4f2d;
+    cursor: pointer;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #ffb000;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.location {
+    font-size: 14px;
+    color: #555;
+}
+
+.location b {
+    color: #222;
+}
+
+.nav-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.nav-link:hover {
+    color: #ff4f2d;
+}
+
+.cart-link {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -12px;
+    right: -15px;
+    background: #ff4f2d;
+    color: white;
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-btn {
+    padding: 10px 20px;
+    border: 1px solid #ff4f2d;
+    border-radius: 8px;
+    background: white;
+    color: #ff4f2d;
+    font-weight: 700;
+    transition: .25s;
+}
+
+.login-btn:hover {
+    background: #ff4f2d;
+    color: white;
+}
+
+/* =========================================================
+   PAGE SYSTEM
+========================================================= */
+
+.page {
+    display: none;
+    animation: pageIn .35s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    width: 88%;
+    max-width: 1400px;
+    margin: auto;
+}
+
+section {
+    padding: 50px 0;
+}
+
+.section-title {
+    font-size: 28px;
+    margin-bottom: 28px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    min-height: 500px;
+    padding: 70px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+
+    background:
+        radial-gradient(circle at 80% 30%, #ffe7cf, transparent 30%),
+        linear-gradient(110deg, #fff7f2, #fff, #fff7e8);
+}
+
+.hero-content {
+    width: 52%;
+}
+
+.hero-content h1 {
+    font-size: 58px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+}
+
+.hero-content h1 span {
+    color: #ff4f2d;
+}
+
+.hero-content p {
+    max-width: 620px;
+    font-size: 18px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 650px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(0,0,0,.08);
+}
+
+.search-box input {
+    flex: 1;
+    padding: 18px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+}
+
+.search-box button {
+    border: none;
+    padding: 0 27px;
+    background: #ff4f2d;
+    color: white;
+    font-weight: 700;
+}
+
+.hero-image {
+    width: 42%;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 530px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 25px;
+    box-shadow: 0 25px 60px rgba(0,0,0,.16);
+}
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+.categories {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    padding: 5px 5px 15px;
+}
+
+.category {
+    min-width: 105px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.category img {
+    width: 95px;
+    height: 95px;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: .25s;
+    border: 3px solid transparent;
+}
+
+.category:hover img {
+    transform: scale(1.08);
+    border-color: #ffb000;
+}
+
+.category p {
+    margin-top: 9px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* =========================================================
+   RESTAURANTS
+========================================================= */
+
+.restaurant-grid,
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.restaurant-card,
+.food-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: .25s;
+}
+
+.restaurant-card:hover,
+.food-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(0,0,0,.11);
+}
+
+.restaurant-image,
+.food-image {
+    height: 190px;
+    position: relative;
+}
+
+.restaurant-image img,
+.food-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.offer {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    background: #176b3a;
+    color: white;
+    padding: 7px 11px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.restaurant-info,
+.food-info {
+    padding: 16px;
+}
+
+.restaurant-name,
+.food-name {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.rating {
+    color: #087f23;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.food-type,
+.restaurant-meta {
+    margin-top: 7px;
+    color: #777;
+    font-size: 13px;
+}
+
+.food-description {
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 9px 0;
+}
+
+.food-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.price {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.add-btn {
+    padding: 8px 17px;
+    background: white;
+    border: 1px solid #ff4f2d;
+    color: #ff4f2d;
+    border-radius: 7px;
+    font-weight: 800;
+    transition: .2s;
+}
+
+.add-btn:hover {
+    background: #ff4f2d;
+    color: white;
+}
+
+/* =========================================================
+   PROMO
+========================================================= */
+
+.promo {
+    margin: 20px 0 50px;
+    min-height: 230px;
+    border-radius: 22px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(110deg, #ff4f2d, #ff9d3d);
+    color: white;
+    overflow: hidden;
+}
+
+.promo h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.promo p {
+    opacity: .9;
+    line-height: 1.6;
+}
+
+.promo button {
+    margin-top: 20px;
+    border: none;
+    background: white;
+    color: #ff4f2d;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 800;
+}
+
+.promo img {
+    width: 280px;
+    height: 175px;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.filter-btn {
+    padding: 10px 18px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 20px;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: #ff4f2d;
+    color: white;
+    border-color: #ff4f2d;
+}
+
+/* =========================================================
+   OFFERS PAGE
+========================================================= */
+
+.offers-header {
+    background: linear-gradient(110deg,#fff2ed,#fff8e8);
+    padding: 50px 7%;
+}
+
+.offers-header h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.offers-header p {
+    color: #666;
+}
+
+/* =========================================================
+   SEARCH PAGE
+========================================================= */
+
+.search-page {
+    padding: 55px 0;
+}
+
+.large-search {
+    display: flex;
+    max-width: 850px;
+    margin-bottom: 40px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.large-search input {
+    flex: 1;
+    padding: 18px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.large-search button {
+    background: #ff4f2d;
+    border: none;
+    color: white;
+    padding: 0 28px;
+    font-weight: 800;
+}
+
+.no-results {
+    padding: 70px;
+    text-align: center;
+    background: white;
+    border-radius: 15px;
+    color: #777;
+}
+
+/* =========================================================
+   CART
+========================================================= */
+
+.cart-page {
+    padding: 55px 0;
+}
+
+.cart-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.cart-items,
+.cart-summary {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    border: 1px solid #eee;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item img {
+    width: 85px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-info h3 {
+    margin-bottom: 6px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity button {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 5px;
+}
+
+.remove-btn {
+    border: none;
+    background: transparent;
+    color: #e33;
+    font-size: 13px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    color: #555;
+}
+
+.summary-total {
+    border-top: 1px solid #ddd;
+    padding-top: 17px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 9px;
+    background: #ff4f2d;
+    color: white;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.empty-cart .icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+/* =========================================================
+   HELP
+========================================================= */
+
+.help-page {
+    padding: 55px 0;
+}
+
+.help-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 22px;
+}
+
+.help-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    padding: 25px;
+    transition: .2s;
+}
+
+.help-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+.help-icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.help-card h3 {
+    margin-bottom: 8px;
+}
+
+.help-card p {
+    color: #777;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   LOGIN OVERLAY
+========================================================= */
+
+.login-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    background: #090909;
+    display: none;
+    overflow-y: auto;
+}
+
+.login-overlay.active {
+    display: block;
+}
+
+/* =========================================================
+   NEON INTRO
+========================================================= */
+
+.login-intro {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at center,
+        rgba(255,79,45,.18),
+        transparent 35%),
+        #080808;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.neon-logo-animation {
+    text-align: center;
+    animation: neonAppear 1.5s ease forwards;
+}
+
+.neon-logo-animation h1 {
+    color: #ff4f2d;
+    font-size: 70px;
+    font-weight: 900;
+    text-shadow:
+        0 0 10px #ff4f2d,
+        0 0 30px #ff4f2d,
+        0 0 60px #ff4f2d;
+}
+
+.neon-logo-animation h1 span {
+    color: #ffb000;
+}
+
+.neon-logo-animation p {
+    color: #ddd;
+    margin-top: 15px;
+    letter-spacing: 3px;
+}
+
+@keyframes neonAppear {
+    0% {
+        opacity: 0;
+        transform: scale(.5);
+        filter: blur(15px);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =========================================================
+   LOGIN CONTENT
+========================================================= */
+
+.login-content {
+    min-height: 100vh;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,79,45,.1),transparent 30%),
+        radial-gradient(circle at 80% 80%,rgba(255,176,0,.1),transparent 30%),
+        #101010;
+}
+
+.login-content.show {
+    display: flex;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 850px;
+    background: #fff;
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.5);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.login-header h2 {
+    font-size: 30px;
+}
+
+.login-header p {
+    color: #777;
+    margin-top: 7px;
+}
+
+/* =========================================================
+   ROLE CARDS
+========================================================= */
+
+.roles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.role-card {
+    padding: 20px;
+    text-align: center;
+    background: #fafafa;
+    border: 2px solid #eee;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.role-card:hover {
+    border-color: #ffb000;
+    transform: translateY(-3px);
+}
+
+.role-card.selected {
+    border-color: #ff4f2d;
+    box-shadow:
+        0 0 0 3px rgba(255,79,45,.1),
+        0 8px 25px rgba(255,79,45,.15);
+}
+
+.role-icon {
+    font-size: 35px;
+    margin-bottom: 8px;
+}
+
+.role-card h3 {
+    font-size: 16px;
+}
+
+.role-card p {
+    color: #777;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* =========================================================
+   FORMS
+========================================================= */
+
+.auth-form {
+    max-width: 500px;
+    margin: auto;
+}
+
+.form-group {
+    margin-bottom: 17px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    outline: none;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    border-color: #ff4f2d;
+    box-shadow: 0 0 0 3px rgba(255,79,45,.1);
+}
+
+.password-wrap {
+    position: relative;
+}
+
+.password-wrap input {
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    border: none;
+    background: transparent;
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 9px;
+    background: #ff4f2d;
+    color: white;
+    font-weight: 800;
+    font-size: 15px;
+    transition: .2s;
+}
+
+.primary-btn:hover {
+    background: #e94021;
+    transform: translateY(-2px);
+}
+
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.auth-links span {
+    color: #ff4f2d;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 22px;
+    color: #666;
+}
+
+.signup-link span {
+    color: #ff4f2d;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.close-login {
+    position: fixed;
+    right: 25px;
+    top: 20px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid #555;
+    background: #171717;
+    color: white;
+    font-size: 22px;
+    z-index: 30;
+}
+
+.captcha-row {
+    display: flex;
+    gap: 10px;
+}
+
+.captcha-display {
+    min-width: 120px;
+    padding: 13px;
+    text-align: center;
+    background: #171717;
+    color: #ffb000;
+    border-radius: 8px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    user-select: none;
+}
+
+.refresh-captcha {
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 8px;
+    padding: 0 14px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    background: #171717;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    z-index: 9000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: .3s;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    background: #111;
+    color: white;
+    padding: 55px 7%;
+    margin-top: 50px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+}
+
+.footer-logo {
+    color: #ff4f2d;
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 15px;
+}
+
+.footer-grid p,
+.footer-grid a {
+    color: #999;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.footer-column h3 {
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+.footer-column a {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.copyright {
+    border-top: 1px solid #333;
+    margin-top: 35px;
+    padding-top: 20px;
+    color: #777;
+    font-size: 12px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px) {
+
+    .restaurant-grid,
+    .food-grid {
+        grid-template-columns: repeat(3,1fr);
+    }
+
+    .hero-content h1 {
+        font-size: 45px;
+    }
+}
+
+@media(max-width:800px) {
+
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .location,
+    .nav-link:not(.cart-link) {
+        display: none;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 55px 5%;
+    }
+
+    .hero-content,
+    .hero-image {
+        width: 100%;
+    }
+
+    .hero-content h1 {
+        font-size: 42px;
+    }
+
+    .search-box {
+        margin: auto;
+    }
+
+    .restaurant-grid,
+    .food-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .cart-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .help-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .roles {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:500px) {
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .login-btn {
+        padding: 8px 12px;
+    }
+
+    .hero-content h1 {
+        font-size: 35px;
+    }
+
+    .hero-content p {
+        font-size: 15px;
+    }
+
+    .restaurant-grid,
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .promo {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 25px;
+    }
+
+    .promo img {
+        width: 100%;
+        margin-top: 25px;
+    }
+
+    .help-grid,
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-box {
+        padding: 22px;
+    }
+
+    .neon-logo-animation h1 {
+        font-size: 48px;
+    }
+}
+
+/* =========================================================
+   RESTAURANT PARTNER DASHBOARD
+========================================================= */
+.restaurant-page-wrap{padding:45px 0 70px;background:#f8f8f8;min-height:calc(100vh - 72px)}
+.restaurant-hero{background:linear-gradient(110deg,#fff4ef,#fff9e8);padding:38px 7%;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.restaurant-hero h1{font-size:42px;margin-bottom:10px}.restaurant-hero p{color:#666;line-height:1.6}
+.restaurant-badge{background:#171717;color:#ffb000;padding:10px 15px;border-radius:999px;font-weight:800;white-space:nowrap}
+.partner-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:28px 0}.partner-stat{background:#fff;border:1px solid #eee;border-radius:16px;padding:24px}.partner-stat .icon{font-size:30px}.partner-stat h3{margin-top:10px;color:#555;font-size:14px}.partner-stat strong{display:block;font-size:28px;margin-top:6px}
+.partner-section{background:#fff;border:1px solid #eee;border-radius:18px;padding:25px;margin-bottom:25px}.partner-section-header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}.partner-section-header h2{font-size:24px}.small-btn{border:1px solid #ff4f2d;background:#fff;color:#ff4f2d;padding:10px 16px;border-radius:8px;font-weight:800}.small-btn:hover{background:#ff4f2d;color:#fff}
+.order-table{width:100%;border-collapse:collapse}.order-table th,.order-table td{text-align:left;padding:14px 10px;border-bottom:1px solid #eee;font-size:14px}.order-table th{color:#777;font-size:12px;text-transform:uppercase}.status-pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#fff3d6;color:#9a6500;font-size:12px;font-weight:800}.status-pill.completed{background:#e7f7ec;color:#087f23}
+.product-admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.product-admin-card{border:1px solid #eee;border-radius:14px;padding:16px;background:#fff}.product-admin-card img{width:100%;height:150px;object-fit:cover;border-radius:10px}.product-admin-card h3{margin:10px 0 5px}.product-admin-card p{color:#777;font-size:13px}.product-admin-actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.price-editor{width:90px;padding:8px;border:1px solid #ddd;border-radius:7px}.add-product-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;padding-top:20px;border-top:1px solid #eee}.add-product-form .full{grid-column:1/-1}.add-product-form input,.add-product-form select,.add-product-form textarea,.bank-form input,.bank-form select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;outline:none}.add-product-form textarea{min-height:80px;resize:vertical}.partner-card-actions{display:flex;gap:10px;flex-wrap:wrap}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.profile-info-card{background:#fff;border:1px solid #eee;border-radius:16px;padding:24px}.profile-info-row{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid #eee}.profile-info-row:last-child{border-bottom:0}.profile-label{color:#777}.bank-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.bank-form .full{grid-column:1/-1}.wallet-balance{background:linear-gradient(110deg,#171717,#292929);color:#fff;border-radius:20px;padding:30px;margin-bottom:22px}.wallet-balance .amount{font-size:42px;font-weight:900;color:#ffb000;margin:8px 0}.wallet-note{color:#bbb;font-size:13px}.wallet-actions{display:flex;gap:12px;flex-wrap:wrap}.wallet-actions button{padding:12px 18px;border-radius:8px;font-weight:800;border:1px solid #ff4f2d}.wallet-actions .primary{background:#ff4f2d;color:#fff}.wallet-actions .secondary{background:#fff;color:#ff4f2d}.transaction{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid #eee}.transaction:last-child{border-bottom:0}.transaction .credit{color:#087f23;font-weight:800}.onboarding-page{min-height:calc(100vh - 72px);padding:60px 20px;background:linear-gradient(110deg,#fff7f2,#fff,#fff7e8)}.onboarding-box{max-width:900px;margin:auto;background:#fff;border-radius:22px;padding:35px;box-shadow:0 20px 60px rgba(0,0,0,.1)}.onboarding-steps{display:flex;gap:10px;margin:20px 0 28px}.onboarding-step{flex:1;height:7px;background:#eee;border-radius:99px}.onboarding-step.active{background:#ff4f2d}.onboarding-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}.onboarding-form .full{grid-column:1/-1}.onboarding-form input,.onboarding-form textarea,.onboarding-form select{width:100%;padding:13px;border:1px solid #ddd;border-radius:9px}.location-helper{background:#fff7f2;border:1px solid #ffd4c7;padding:14px;border-radius:10px;color:#666;font-size:13px;grid-column:1/-1}.restaurant-profile-btn{padding:10px 16px;border:1px solid #ff4f2d;border-radius:8px;background:#fff;color:#ff4f2d;font-weight:800}.restaurant-profile-btn:hover{background:#ff4f2d;color:#fff}
+@media(max-width:800px){.partner-grid,.product-admin-grid,.profile-grid{grid-template-columns:1fr}.restaurant-hero{flex-direction:column;align-items:flex-start}.add-product-form,.onboarding-form,.bank-form{grid-template-columns:1fr}.add-product-form .full,.onboarding-form .full,.bank-form .full{grid-column:auto}.order-table{display:block;overflow-x:auto;white-space:nowrap}}
+
+/* =========================================================
+   CUSTOMER PROFILE
+========================================================= */
+.customer-profile-btn{padding:10px 16px;border:1px solid #ff4f2d;border-radius:8px;background:#fff;color:#ff4f2d;font-weight:800;cursor:pointer;transition:.2s}.customer-profile-btn:hover{background:#ff4f2d;color:#fff}
+.customer-profile-page{padding:45px 0 70px;min-height:calc(100vh - 72px);background:#f8f8f8}
+.customer-profile-header{background:linear-gradient(110deg,#fff4ef,#fff9e8);border-radius:20px;padding:30px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.customer-avatar{width:72px;height:72px;border-radius:50%;background:#ff4f2d;color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;flex:none}
+.customer-profile-title{display:flex;align-items:center;gap:18px}.customer-profile-title h1{font-size:34px}.customer-profile-title p{color:#777;margin-top:6px}
+.customer-profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.customer-card{background:#fff;border:1px solid #eee;border-radius:18px;padding:24px}.customer-card h2{margin-bottom:18px}.customer-stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.customer-stat{background:#fff7f2;border-radius:12px;padding:18px}.customer-stat strong{display:block;font-size:25px;margin-top:5px}.customer-stat span{color:#777;font-size:13px}
+.customer-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.customer-form .full{grid-column:1/-1}.customer-form label{font-size:13px;font-weight:700;color:#555;display:block;margin-bottom:6px}.customer-form input,.customer-form textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;outline:none;font:inherit}.customer-form textarea{min-height:90px;resize:vertical}.customer-location-box{background:#fff7f2;border:1px solid #ffd4c7;padding:14px;border-radius:10px;color:#666;font-size:13px;margin-top:14px}.customer-order-item{border:1px solid #eee;border-radius:12px;padding:15px;margin-bottom:12px}.customer-order-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.customer-order-restaurant{font-size:16px;font-weight:900;color:#202124;margin-bottom:8px}.customer-order-items{color:#666;font-size:13px;margin-top:7px;line-height:1.6}.customer-order-actions{display:flex;justify-content:flex-end;margin-top:12px}.order-again-btn{border:0;background:#ff4f2d;color:#fff;padding:9px 15px;border-radius:8px;font-weight:800;cursor:pointer}.order-again-btn:hover{background:#e84324}.customer-empty{padding:25px;text-align:center;background:#fafafa;border-radius:12px;color:#777}
+@media(max-width:800px){.customer-profile-grid,.customer-form{grid-template-columns:1fr}.customer-form .full{grid-column:auto}.customer-profile-header{flex-direction:column;align-items:flex-start}.customer-profile-title h1{font-size:28px}}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<header class="navbar">
+
+    <div class="nav-left">
+
+        <div class="logo" onclick="handleLogoClick()">
+            Neon<span>Bite</span>
+        </div>
+
+        <div class="location">
+            📍 <b>Chennai</b> ▾
+        </div>
+
+    </div>
+
+    <nav class="nav-right">
+
+        <div class="nav-link" onclick="showPage('search')">
+            🔎 Search
+        </div>
+
+        <div class="nav-link" onclick="showPage('offers')">
+            🏷️ Offers
+        </div>
+
+        <div class="nav-link" onclick="showPage('menu')">
+            🍔 Menu
+        </div>
+
+        <div class="nav-link" onclick="showPage('help')">
+            ❓ Help
+        </div>
+
+        <div class="nav-link cart-link" onclick="showPage('cart')">
+            🛒 Cart
+            <span class="cart-count" id="cartCount">0</span>
+        </div>
+
+        <button class="login-btn" id="customerLoginButton" onclick="openLogin()">
+            Login
+        </button>
+
+        <button class="customer-profile-btn hidden" id="customerProfileButton" onclick="openCustomerProfile()">
+            👤 Profile
+        </button>
+
+        <button class="restaurant-profile-btn hidden" id="restaurantProfileButton" onclick="showPage('restaurantProfile')">
+            🍽️ Restaurant Profile
+        </button>
+
+    </nav>
+
+</header>
+
+
+<!-- =========================================================
+     HOME PAGE
+========================================================= -->
+
+<div id="home" class="page active">
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Hungry?
+                <br>
+                <span>We've got you.</span>
+            </h1>
+
+            <p>
+                Discover delicious food from the best restaurants
+                around you and get it delivered straight to your doorstep.
+            </p>
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="heroSearch"
+                    placeholder="Search for restaurant or food..."
+                >
+
+                <button onclick="performHeroSearch()">
+                    Search
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="hero-image">
+
+            <img
+                src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=85"
+                alt="Delicious food"
+            >
+
+        </div>
+
+    </section>
+
+
+    <main class="container">
+
+        <!-- CATEGORIES -->
+
+        <section>
+
+            <h2 class="section-title">
+                What's on your mind?
+            </h2>
+
+            <div class="categories">
+
+                <div class="category" onclick="filterCategory('Burger')">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80">
+                    <p>Burgers</p>
+                </div>
+
+                <div class="category" onclick="filterCategory('Pizza')">
+                    <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=300&q=80">
+                    <p>Pizza</p>
+                </div>
+
+                <div class="category" onclick="filterCategory('Indian')">
+                    <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=300&q=80">
+                    <p>Indian</p>
+                </div>
+
+                <div class="category" onclick="filterCategory('Chinese')">
+                    <img src="https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=300&q=80">
+                    <p>Chinese</p>
+                </div>
+
+                <div class="category" onclick="filterCategory('Dessert')">
+                    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=300&q=80">
+                    <p>Desserts</p>
+                </div>
+
+                <div class="category" onclick="filterCategory('Drinks')">
+                    <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=300&q=80">
+                    <p>Drinks</p>
+                </div>
+
+                <div class="category" onclick="filterCategory('Biryani')">
+                    <img src="https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=300&q=80">
+                    <p>Biryani</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESTAURANTS -->
+
+        <section>
+
+            <h2 class="section-title">
+                Top restaurants near you
+            </h2>
+
+            <div class="restaurant-grid" id="customerRestaurantGrid">
+
+                <div class="restaurant-card">
+
+                    <div class="restaurant-image">
+
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80">
+
+                        <div class="offer">
+                            50% OFF
+                        </div>
+
+                    </div>
+
+                    <div class="restaurant-info">
+
+                        <div class="restaurant-name">
+                            Urban Spice
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.7
+                        </div>
+
+                        <div class="food-type">
+                            Indian • Chinese • Biryani
+                        </div>
+
+                        <div class="restaurant-meta">
+                            25-30 min • ₹300 for two
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="restaurant-card">
+
+                    <div class="restaurant-image">
+
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80">
+
+                        <div class="offer">
+                            40% OFF
+                        </div>
+
+                    </div>
+
+                    <div class="restaurant-info">
+
+                        <div class="restaurant-name">
+                            The Food Factory
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.6
+                        </div>
+
+                        <div class="food-type">
+                            Burgers • Fast Food • Shakes
+                        </div>
+
+                        <div class="restaurant-meta">
+                            20-25 min • ₹250 for two
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="restaurant-card">
+
+                    <div class="restaurant-image">
+
+                        <img src="https://images.unsplash.com/photo-1579684947550-22e945225d9a?auto=format&fit=crop&w=800&q=80">
+
+                        <div class="offer">
+                            30% OFF
+                        </div>
+
+                    </div>
+
+                    <div class="restaurant-info">
+
+                        <div class="restaurant-name">
+                            Pizza House
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.8
+                        </div>
+
+                        <div class="food-type">
+                            Pizza • Italian • Pasta
+                        </div>
+
+                        <div class="restaurant-meta">
+                            30-35 min • ₹450 for two
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="restaurant-card">
+
+                    <div class="restaurant-image">
+
+                        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80">
+
+                        <div class="offer">
+                            60% OFF
+                        </div>
+
+                    </div>
+
+                    <div class="restaurant-info">
+
+                        <div class="restaurant-name">
+                            Spice Garden
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.5
+                        </div>
+
+                        <div class="food-type">
+                            South Indian • North Indian
+                        </div>
+
+                        <div class="restaurant-meta">
+                            20-30 min • ₹280 for two
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROMOTION -->
+
+        <div class="promo">
+
+            <div>
+
+                <h2>
+                    Delicious food. Amazing offers.
+                </h2>
+
+                <p>
+                    Discover exclusive discounts from restaurants
+                    around you.
+                </p>
+
+                <button onclick="showPage('offers')">
+                    Explore Offers
+                </button>
+
+            </div>
+
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80">
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     MENU PAGE
+========================================================= -->
+
+<div id="menu" class="page">
+
+    <main class="container">
+
+        <section>
+
+            <h1 class="section-title">
+                🍽️ NeonBite Menu
+            </h1>
+
+            <div class="filters">
+
+                <button class="filter-btn active"
+                        onclick="filterMenu('All',this)">
+                    All
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterMenu('Burger',this)">
+                    Burgers
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterMenu('Pizza',this)">
+                    Pizza
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterMenu('Biryani',this)">
+                    Biryani
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterMenu('Indian',this)">
+                    Indian
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterMenu('Chinese',this)">
+                    Chinese
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterMenu('Dessert',this)">
+                    Desserts
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterMenu('Drinks',this)">
+                    Drinks
+                </button>
+
+            </div>
+
+
+            <div class="food-grid" id="menuGrid">
+
+                <!-- FOOD 1 -->
+
+                <div class="food-card" data-category="Burger">
+
+                    <div class="food-image">
+
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80">
+
+                    </div>
+
+                    <div class="food-info">
+
+                        <div class="food-name">
+                            Classic Chicken Burger
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.8
+                        </div>
+
+                        <p class="food-description">
+                            Juicy chicken patty with fresh vegetables
+                            and creamy sauce.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="price">
+                                ₹199
+                            </div>
+
+                            <button class="add-btn"
+                                    onclick="addToCart('Classic Chicken Burger',199,'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80')">
+                                ADD
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOD 2 -->
+
+                <div class="food-card" data-category="Pizza">
+
+                    <div class="food-image">
+
+                        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=700&q=80">
+
+                    </div>
+
+                    <div class="food-info">
+
+                        <div class="food-name">
+                            Farmhouse Pizza
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.7
+                        </div>
+
+                        <p class="food-description">
+                            Loaded with vegetables, cheese and Italian herbs.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="price">
+                                ₹299
+                            </div>
+
+                            <button class="add-btn"
+                                    onclick="addToCart('Farmhouse Pizza',299,'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=300&q=80')">
+                                ADD
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOD 3 -->
+
+                <div class="food-card" data-category="Biryani">
+
+                    <div class="food-image">
+
+                        <img src="https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=700&q=80">
+
+                    </div>
+
+                    <div class="food-info">
+
+                        <div class="food-name">
+                            Chicken Biryani
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.9
+                        </div>
+
+                        <p class="food-description">
+                            Aromatic basmati rice with tender chicken
+                            and authentic spices.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="price">
+                                ₹249
+                            </div>
+
+                            <button class="add-btn"
+                                    onclick="addToCart('Chicken Biryani',249,'https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=300&q=80')">
+                                ADD
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOD 4 -->
+
+                <div class="food-card" data-category="Chinese">
+
+                    <div class="food-image">
+
+                        <img src="https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=700&q=80">
+
+                    </div>
+
+                    <div class="food-info">
+
+                        <div class="food-name">
+                            Chicken Hakka Noodles
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.6
+                        </div>
+
+                        <p class="food-description">
+                            Wok-tossed noodles with vegetables and
+                            spicy Asian sauces.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="price">
+                                ₹189
+                            </div>
+
+                            <button class="add-btn"
+                                    onclick="addToCart('Chicken Hakka Noodles',189,'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=300&q=80')">
+                                ADD
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOD 5 -->
+
+                <div class="food-card" data-category="Indian">
+
+                    <div class="food-image">
+
+                        <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=700&q=80">
+
+                    </div>
+
+                    <div class="food-info">
+
+                        <div class="food-name">
+                            Paneer Butter Masala
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.7
+                        </div>
+
+                        <p class="food-description">
+                            Soft paneer cooked in a rich creamy
+                            tomato gravy.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="price">
+                                ₹219
+                            </div>
+
+                            <button class="add-btn"
+                                    onclick="addToCart('Paneer Butter Masala',219,'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=300&q=80')">
+                                ADD
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOD 6 -->
+
+                <div class="food-card" data-category="Indian">
+
+                    <div class="food-image">
+
+                        <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=700&q=80">
+
+                    </div>
+
+                    <div class="food-info">
+
+                        <div class="food-name">
+                            Masala Dosa
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.8
+                        </div>
+
+                        <p class="food-description">
+                            Crispy dosa served with potato masala,
+                            chutney and sambar.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="price">
+                                ₹129
+                            </div>
+
+                            <button class="add-btn"
+                                    onclick="addToCart('Masala Dosa',129,'https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=300&q=80')">
+                                ADD
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOD 7 -->
+
+                <div class="food-card" data-category="Dessert">
+
+                    <div class="food-image">
+
+                        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=700&q=80">
+
+                    </div>
+
+                    <div class="food-info">
+
+                        <div class="food-name">
+                            Chocolate Donut
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.6
+                        </div>
+
+                        <p class="food-description">
+                            Soft chocolate glazed donut with
+                            delicious toppings.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="price">
+                                ₹99
+                            </div>
+
+                            <button class="add-btn"
+                                    onclick="addToCart('Chocolate Donut',99,'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=300&q=80')">
+                                ADD
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOD 8 -->
+
+                <div class="food-card" data-category="Drinks">
+
+                    <div class="food-image">
+
+                        <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=700&q=80">
+
+                    </div>
+
+                    <div class="food-info">
+
+                        <div class="food-name">
+                            Cold Coffee
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.5
+                        </div>
+
+                        <p class="food-description">
+                            Chilled creamy coffee served with
+                            a delicious foam topping.
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="price">
+                                ₹119
+                            </div>
+
+                            <button class="add-btn"
+                                    onclick="addToCart('Cold Coffee',119,'https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=300&q=80')">
+                                ADD
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     OFFERS PAGE
+========================================================= -->
+
+<div id="offers" class="page">
+
+    <div class="offers-header">
+
+        <h1>
+            🏷️ Exclusive Offers
+        </h1>
+
+        <p>
+            Save more on your favourite food today.
+        </p>
+
+    </div>
+
+    <main class="container">
+
+        <section>
+
+            <div class="filters">
+
+                <button class="filter-btn active"
+                        onclick="filterOffers('all',this)">
+                    All Offers
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterOffers('20',this)">
+                    20%+ OFF
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterOffers('40',this)">
+                    40%+ OFF
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterOffers('50',this)">
+                    50%+ OFF
+                </button>
+
+                <button class="filter-btn"
+                        onclick="filterOffers('60',this)">
+                    60%+ OFF
+                </button>
+
+            </div>
+
+
+            <div class="restaurant-grid" id="offerGrid">
+
+                <div class="restaurant-card offer-card" data-discount="50">
+
+                    <div class="restaurant-image">
+
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80">
+
+                        <div class="offer">
+                            50% OFF
+                        </div>
+
+                    </div>
+
+                    <div class="restaurant-info">
+
+                        <div class="restaurant-name">
+                            Urban Spice
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.7
+                        </div>
+
+                        <div class="food-type">
+                            Indian • Chinese • Biryani
+                        </div>
+
+                        <div class="restaurant-meta">
+                            25-30 min • ₹300 for two
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="restaurant-card offer-card" data-discount="40">
+
+                    <div class="restaurant-image">
+
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80">
+
+                        <div class="offer">
+                            40% OFF
+                        </div>
+
+                    </div>
+
+                    <div class="restaurant-info">
+
+                        <div class="restaurant-name">
+                            The Food Factory
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.6
+                        </div>
+
+                        <div class="food-type">
+                            Burgers • Fast Food • Shakes
+                        </div>
+
+                        <div class="restaurant-meta">
+                            20-25 min • ₹250 for two
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="restaurant-card offer-card" data-discount="30">
+
+                    <div class="restaurant-image">
+
+                        <img src="https://images.unsplash.com/photo-1579684947550-22e945225d9a?auto=format&fit=crop&w=800&q=80">
+
+                        <div class="offer">
+                            30% OFF
+                        </div>
+
+                    </div>
+
+                    <div class="restaurant-info">
+
+                        <div class="restaurant-name">
+                            Pizza House
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.8
+                        </div>
+
+                        <div class="food-type">
+                            Pizza • Italian • Pasta
+                        </div>
+
+                        <div class="restaurant-meta">
+                            30-35 min • ₹450 for two
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="restaurant-card offer-card" data-discount="60">
+
+                    <div class="restaurant-image">
+
+                        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80">
+
+                        <div class="offer">
+                            60% OFF
+                        </div>
+
+                    </div>
+
+                    <div class="restaurant-info">
+
+                        <div class="restaurant-name">
+                            Spice Garden
+                        </div>
+
+                        <div class="rating">
+                            ★ 4.5
+                        </div>
+
+                        <div class="food-type">
+                            South Indian • North Indian
+                        </div>
+
+                        <div class="restaurant-meta">
+                            20-30 min • ₹280 for two
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     SEARCH PAGE
+========================================================= -->
+
+<div id="search" class="page">
+
+    <main class="container search-page">
+
+        <h1 class="section-title">
+            🔎 Search NeonBite
+        </h1>
+
+        <div class="large-search">
+
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Search restaurants, dishes or categories..."
+                oninput="searchFood()"
+            >
+
+            <button onclick="searchFood()">
+                Search
+            </button>
+
+        </div>
+
+        <div id="searchResults" class="food-grid">
+
+        </div>
+
+        <div id="noResults" class="no-results hidden">
+
+            <h2>
+                😕 No results found
+            </h2>
+
+            <p>
+                Try searching for pizza, burger, biryani or another dish.
+            </p>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     CART PAGE
+========================================================= -->
+
+<div id="cart" class="page">
+
+    <main class="container cart-page">
+
+        <h1 class="section-title">
+            🛒 Your Cart
+        </h1>
+
+        <div class="cart-layout">
+
+            <div class="cart-items" id="cartItems">
+
+            </div>
+
+            <div class="cart-summary">
+
+                <h2>
+                    Bill Details
+                </h2>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">₹0</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Delivery Fee</span>
+                    <span id="deliveryFee">₹40</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Taxes</span>
+                    <span id="tax">₹0</span>
+                </div>
+
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span id="total">₹0</span>
+                </div>
+
+                <button class="checkout-btn"
+                        onclick="checkout()">
+                    Proceed to Checkout
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     HELP PAGE
+========================================================= -->
+
+<div id="help" class="page">
+
+    <main class="container help-page">
+
+        <h1 class="section-title">
+            ❓ How can we help?
+        </h1>
+
+        <div class="help-grid">
+
+            <div class="help-card">
+
+                <div class="help-icon">
+                    📦
+                </div>
+
+                <h3>
+                    Track your order
+                </h3>
+
+                <p>
+                    Check the current status of your food delivery.
+                </p>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <div class="help-icon">
+                    💳
+                </div>
+
+                <h3>
+                    Payment help
+                </h3>
+
+                <p>
+                    Get assistance with payment and billing issues.
+                </p>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <div class="help-icon">
+                    🔄
+                </div>
+
+                <h3>
+                    Refunds
+                </h3>
+
+                <p>
+                    Learn about refunds and cancelled orders.
+                </p>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <div class="help-icon">
+                    🏪
+                </div>
+
+                <h3>
+                    Restaurant issues
+                </h3>
+
+                <p>
+                    Report problems with your restaurant order.
+                </p>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <div class="help-icon">
+                    🛵
+                </div>
+
+                <h3>
+                    Delivery support
+                </h3>
+
+                <p>
+                    Get help with delivery related problems.
+                </p>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <div class="help-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    AI Food Assistant
+                </h3>
+
+                <p>
+                    Ask NeonBite AI for food recommendations.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     RESTAURANT ONBOARDING PAGE
+========================================================= -->
+<div id="restaurantOnboarding" class="page">
+    <div class="onboarding-page">
+        <div class="onboarding-box">
+            <div class="login-header">
+                <div class="logo">Neon<span>Bite</span></div>
+                <h2 style="margin-top:12px;">Complete your restaurant setup</h2>
+                <p>Add your restaurant information so customers can find and order from you.</p>
+            </div>
+            <div class="onboarding-steps"><div class="onboarding-step active"></div><div class="onboarding-step active"></div><div class="onboarding-step active"></div></div>
+            <form class="onboarding-form" onsubmit="saveRestaurantProfile(event)">
+                <div><label class="form-group label">Restaurant Name</label><input id="restaurantNameInput" required placeholder="e.g. Hitesh Kitchen"></div>
+                <div><label class="form-group label">Restaurant Phone</label><input id="restaurantPhoneInput" required maxlength="10" placeholder="10-digit mobile number"></div>
+                <div class="full"><label class="form-group label">Full Address / Location</label><textarea id="restaurantAddressInput" required placeholder="Enter complete restaurant address"></textarea></div>
+                <div><label class="form-group label">Latitude</label><input id="restaurantLatInput" type="number" step="any" required placeholder="17.4567"></div>
+                <div><label class="form-group label">Longitude</label><input id="restaurantLngInput" type="number" step="any" required placeholder="78.5523"></div>
+                <div><label class="form-group label">Cuisine</label><input id="restaurantCuisineInput" required placeholder="Indian, Chinese, Fast Food"></div>
+                <div><label class="form-group label">Opening Hours</label><input id="restaurantHoursInput" required placeholder="10:00 AM - 11:00 PM"></div>
+                <div><label class="form-group label">Restaurant Type</label><select id="restaurantTypeInput"><option>Restaurant</option><option>Cafe</option><option>Bakery</option><option>Cloud Kitchen</option><option>Food Truck</option></select></div>
+                <div><label class="form-group label">Estimated Delivery Time</label><input id="restaurantDeliveryInput" required placeholder="25-35 min"></div>
+                <div class="location-helper">📍 <b>Location tip:</b> You can use the browser's location permission to get accurate latitude and longitude. The values entered here are what NeonBite will use to place your restaurant on the nearby-restaurants map.</div>
+                <button type="button" class="small-btn" onclick="useRestaurantLocation()">📍 Use My Current Location</button>
+                <button class="primary-btn" type="submit">CONTINUE TO RESTAURANT HOME</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
+     RESTAURANT HOME / DASHBOARD
+========================================================= -->
+<div id="restaurantHome" class="page">
+    <div class="restaurant-hero">
+        <div><h1>Welcome, <span id="restaurantWelcomeName">Restaurant Partner</span> 👋</h1><p>Manage your restaurant, products and incoming customer orders from one place.</p></div>
+        <div class="restaurant-badge">🟢 Partner Dashboard</div>
+    </div>
+    <main class="container restaurant-page-wrap">
+        <div class="partner-grid">
+            <div class="partner-stat"><div class="icon">📦</div><h3>Orders</h3><strong id="restaurantOrderCount">0</strong></div>
+            <div class="partner-stat"><div class="icon">💰</div><h3>Wallet Balance</h3><strong id="restaurantWalletStat">₹0</strong></div>
+            <div class="partner-stat"><div class="icon">🍔</div><h3>Products</h3><strong id="restaurantProductCount">0</strong></div>
+        </div>
+        <section class="partner-section">
+            <div class="partner-section-header"><h2>📦 Customer Orders</h2><button class="small-btn" onclick="showPage('restaurantHome');renderRestaurantDashboard()">Refresh</button></div>
+            <div id="restaurantOrdersContainer"></div>
+        </section>
+        <section class="partner-section">
+            <div class="partner-section-header"><h2>🛠️ Customize your seller page</h2><div class="partner-card-actions"><button class="small-btn" onclick="showPage('restaurantProducts')">Manage Products</button><button class="small-btn" onclick="showPage('restaurantWallet')">My Wallet</button></div></div>
+            <p style="color:#777;line-height:1.6;">Add food products, set customer prices, update availability and see the 30% NeonBite platform fee before publishing.</p>
+        </section>
+    </main>
+</div>
+
+<!-- =========================================================
+     RESTAURANT PRODUCTS
+========================================================= -->
+<div id="restaurantProducts" class="page">
+    <main class="container restaurant-page-wrap">
+        <div class="partner-section"><div class="partner-section-header"><div><h1>🍔 My Food Products</h1><p style="color:#777;margin-top:7px;">Products displayed on your NeonBite seller page.</p></div><button class="small-btn" onclick="showPage('restaurantHome')">← Dashboard</button></div>
+        <div id="restaurantProductGrid" class="product-admin-grid"></div>
+        <form class="add-product-form" onsubmit="addRestaurantProduct(event)">
+            <h2 class="full">➕ Add a new food product</h2>
+            <div><label>Food Name</label><input id="newFoodName" required placeholder="Chicken Biryani"></div>
+            <div><label>Customer Price (₹)</label><input id="newFoodPrice" type="number" min="1" step="1" required placeholder="249"></div>
+            <div><label>Category</label><select id="newFoodCategory"><option>Indian</option><option>Burger</option><option>Pizza</option><option>Biryani</option><option>Chinese</option><option>Dessert</option><option>Drinks</option></select></div>
+            <div><label>Image URL</label><input id="newFoodImage" placeholder="https://..."></div>
+            <div class="full"><label>Description</label><textarea id="newFoodDescription" placeholder="Describe your food item"></textarea></div>
+            <button class="primary-btn full" type="submit">ADD PRODUCT TO SELLER PAGE</button>
+        </form></div>
+    </main>
+</div>
+
+<!-- =========================================================
+     RESTAURANT PROFILE
+========================================================= -->
+<div id="restaurantProfile" class="page">
+    <main class="container restaurant-page-wrap">
+        <div class="partner-section-header"><div><h1>🍽️ Restaurant Profile</h1><p style="color:#777;margin-top:7px;">Your restaurant information</p></div><button class="small-btn" onclick="showPage('restaurantHome')">← Dashboard</button></div>
+        <div class="profile-grid">
+            <div class="profile-info-card"><h2 id="profileRestaurantName">Restaurant</h2><p id="profileRestaurantCuisine" style="color:#777;margin-top:6px;"></p><div class="profile-info-row"><span class="profile-label">Address</span><strong id="profileRestaurantAddress"></strong></div><div class="profile-info-row"><span class="profile-label">Coordinates</span><strong id="profileRestaurantCoordinates"></strong></div><div class="profile-info-row"><span class="profile-label">Hours</span><strong id="profileRestaurantHours"></strong></div><div class="profile-info-row"><span class="profile-label">Delivery</span><strong id="profileRestaurantDelivery"></strong></div></div>
+            <div class="profile-info-card"><h2>Quick actions</h2><div class="partner-card-actions" style="margin-top:20px;"><button class="small-btn" onclick="showPage('restaurantProducts')">🍔 Manage Products</button><button class="small-btn" onclick="showPage('restaurantWallet')">💰 My Wallet</button><button class="small-btn" onclick="showPage('restaurantHome')">📦 View Orders</button><button class="small-btn" onclick="restaurantLogout()">Log out</button></div></div>
+        </div>
+    </main>
+</div>
+
+<!-- =========================================================
+     CUSTOMER PROFILE
+========================================================= -->
+<div id="customerProfile" class="page">
+    <main class="container customer-profile-page">
+        <div class="customer-profile-header">
+            <div class="customer-profile-title">
+                <div class="customer-avatar" id="customerAvatar">👤</div>
+                <div><h1 id="customerProfileName">Customer</h1><p id="customerProfileMobile">Mobile number</p></div>
+            </div>
+            <button class="small-btn" onclick="showPage('home')">← Back to Home</button>
+        </div>
+
+        <div class="customer-profile-grid">
+            <section class="customer-card">
+                <h2>👤 My Profile</h2>
+                <form class="customer-form" onsubmit="saveCustomerProfile(event)">
+                    <div><label>Full Name</label><input id="customerNameInput" required></div>
+                    <div><label>Mobile Number</label><input id="customerMobileInput" readonly></div>
+                    <div class="full"><label>Delivery Address</label><textarea id="customerAddressInput" placeholder="Enter your complete delivery address"></textarea></div>
+                    <div><label>Latitude</label><input id="customerLatInput" readonly></div>
+                    <div><label>Longitude</label><input id="customerLngInput" readonly></div>
+                    <button type="button" class="small-btn full" onclick="useCustomerLocation()">📍 Use My Current Location</button>
+                    <button type="submit" class="primary-btn full">SAVE PROFILE</button>
+                </form>
+                <div class="customer-location-box">📍 Your saved latitude and longitude can be used by NeonBite for delivery-location and nearby-restaurant features.</div>
+            </section>
+
+            <section class="customer-card">
+                <h2>📊 Account Summary</h2>
+                <div class="customer-stat-grid">
+                    <div class="customer-stat"><span>Total Orders</span><strong id="customerTotalOrders">0</strong></div>
+                    <div class="customer-stat"><span>Saved Address</span><strong id="customerAddressStatus">Not set</strong></div>
+                </div>
+                <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+                    <button class="small-btn" onclick="showPage('cart')">🛒 View Cart</button>
+                    <button class="small-btn" onclick="customerLogout()">Log out</button>
+                </div>
+            </section>
+
+            <section class="customer-card" style="grid-column:1/-1">
+                <h2>📦 Recent Orders</h2>
+                <div id="customerRecentOrders"></div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<!-- =========================================================
+     RESTAURANT WALLET
+========================================================= -->
+<div id="restaurantWallet" class="page">
+    <main class="container restaurant-page-wrap">
+        <div class="partner-section-header"><div><h1>💰 My Wallet</h1><p style="color:#777;margin-top:7px;">Track your earnings after the NeonBite platform fee.</p></div><button class="small-btn" onclick="showPage('restaurantHome')">← Dashboard</button></div>
+        <div class="wallet-balance"><div style="color:#bbb;">Available to withdraw</div><div class="amount" id="walletBalance">₹0</div><div class="wallet-note">NeonBite platform fee: 30% of the food-product selling price. Your restaurant receives 70% of eligible product sales.</div><div class="wallet-actions" style="margin-top:20px;"><button class="primary" onclick="withdrawWallet()">Withdraw to Bank</button><button class="secondary" onclick="showBankForm()">Link / Update Bank Account</button></div></div>
+        <div id="bankFormContainer" class="partner-section hidden"><h2>🏦 Link Bank Account</h2><p style="color:#777;margin:7px 0 20px;">For a real production system, bank details must be sent securely to a regulated payment/payout provider rather than stored only in browser storage.</p><form class="bank-form" onsubmit="saveBankAccount(event)"><div><label>Account Holder Name</label><input id="bankHolder" required></div><div><label>Bank Name</label><input id="bankName" required></div><div><label>Account Number</label><input id="bankAccount" required></div><div><label>IFSC Code</label><input id="bankIfsc" required></div><button class="primary-btn full" type="submit">SAVE BANK ACCOUNT</button></form></div>
+        <div class="partner-section"><h2>📒 Transaction History</h2><div id="walletTransactions" style="margin-top:10px;"></div></div>
+    </main>
+</div>
+
+<!-- CUSTOMER RESTAURANT MENU PAGE -->
+<div id="customerRestaurant" class="page">
+  <main class="container" style="padding:45px 0 70px;">
+    <button class="small-btn" onclick="showPage('home');renderCustomerRestaurants()">← Back to Restaurants</button>
+    <div class="restaurant-hero" style="margin-top:18px;border-radius:18px;">
+      <div><h1 id="customerRestaurantName">Restaurant</h1><p id="customerRestaurantMeta"></p></div>
+      <div class="restaurant-badge">🍽️ Order from this restaurant</div>
+    </div>
+    <section>
+      <h2 class="section-title">🍔 Menu</h2>
+      <div id="customerRestaurantProducts" class="food-grid"></div>
+    </section>
+  </main>
+</div>
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="footer-grid">
+
+        <div>
+
+            <div class="footer-logo">
+                NeonBite
+            </div>
+
+            <p>
+                Your AI-assisted food discovery and delivery
+                platform for delicious meals from restaurants
+                around you.
+            </p>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                Company
+            </h3>
+
+            <a>About Us</a>
+            <a>Careers</a>
+            <a>Contact</a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                Partners
+            </h3>
+
+            <a>Restaurant Partner</a>
+            <a>Delivery Partner</a>
+            <a>Business Dashboard</a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                Support
+            </h3>
+
+            <a onclick="showPage('help')">Help Center</a>
+            <a>Terms</a>
+            <a>Privacy</a>
+
+        </div>
+
+    </div>
+
+    <div class="copyright">
+        © 2026 NeonBite. All rights reserved.
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     LOGIN OVERLAY
+========================================================= -->
+
+<div class="login-overlay" id="loginOverlay">
+
+    <button class="close-login" onclick="closeLogin()">
+        ×
+    </button>
+
+
+    <!-- ANIMATION -->
+
+    <div class="login-intro" id="loginIntro">
+
+        <div class="neon-logo-animation">
+
+            <h1>
+                Neon<span>Bite</span>
+            </h1>
+
+            <p>
+                YOUR FOOD. YOUR WAY.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOGIN CONTENT -->
+
+    <div class="login-content" id="loginContent">
+
+        <div class="login-box">
+
+            <div class="login-header">
+
+                <div class="logo">
+                    Neon<span>Bite</span>
+                </div>
+
+                <h2 style="margin-top:12px;">
+                    Welcome to NeonBite
+                </h2>
+
+                <p>
+                    Login to continue
+                </p>
+
+            </div>
+
+
+            <!-- ROLE SELECTION -->
+
+            <div class="roles">
+
+                <div class="role-card selected"
+                     id="customerRole"
+                     onclick="selectRole('Customer')">
+
+                    <div class="role-icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        Customer
+                    </h3>
+
+                    <p>
+                        Order delicious food
+                    </p>
+
+                </div>
+
+
+                <div class="role-card"
+                     id="restaurantRole"
+                     onclick="selectRole('Restaurant')">
+
+                    <div class="role-icon">
+                        🍽️
+                    </div>
+
+                    <h3>
+                        Restaurant
+                    </h3>
+
+                    <p>
+                        Manage your restaurant & orders
+                    </p>
+
+                </div>
+
+
+                <div class="role-card"
+                     id="deliveryRole"
+                     onclick="selectRole('Delivery Partner')">
+
+                    <div class="role-icon">
+                        🛵
+                    </div>
+
+                    <h3>
+                        Delivery Partner
+                    </h3>
+
+                    <p>
+                        Deliver orders & earn
+                    </p>
+
+                </div>
+
+
+                <div class="role-card"
+                     id="adminRole"
+                     onclick="selectRole('Admin')">
+
+                    <div class="role-icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Admin
+                    </h3>
+
+                    <p>
+                        Manage NeonBite
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form class="auth-form"
+                  id="loginForm"
+                  onsubmit="handleLogin(event)">
+
+                <div class="form-group">
+
+                    <label>
+                        Mobile Number
+                    </label>
+
+                    <input
+                        id="loginMobile"
+                        type="tel"
+                        maxlength="10"
+                        placeholder="Enter mobile number"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <div class="password-wrap">
+
+                        <input
+                            id="loginPassword"
+                            type="password"
+                            placeholder="Enter password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('loginPassword',this)">
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="auth-links">
+
+                    <span onclick="forgotPassword()">
+                        Forgot Password?
+                    </span>
+
+                    <span onclick="showSignup()">
+                        Create Account
+                    </span>
+
+                </div>
+
+
+                <button class="primary-btn"
+                        type="submit"
+                        style="margin-top:20px;">
+                    LOGIN
+                </button>
+
+
+                <div class="signup-link">
+
+                    Don't have an account?
+
+                    <span onclick="showSignup()">
+                        Sign Up
+                    </span>
+
+                </div>
+
+            </form>
+
+
+            <!-- SIGNUP FORM -->
+
+            <form class="auth-form hidden"
+                  id="signupForm"
+                  onsubmit="handleSignup(event)">
+
+                <div class="login-header">
+
+                    <h2>
+                        Create Account
+                    </h2>
+
+                    <p>
+                        Join the NeonBite family
+                    </p>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    <input
+                        id="signupName"
+                        type="text"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Mobile Number
+                    </label>
+
+                    <input
+                        id="signupMobile"
+                        type="tel"
+                        maxlength="10"
+                        placeholder="Enter 10-digit mobile number"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Create Password
+                    </label>
+
+                    <div class="password-wrap">
+
+                        <input
+                            id="signupPassword"
+                            type="password"
+                            placeholder="Create password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('signupPassword',this)">
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        CAPTCHA
+                    </label>
+
+                    <div class="captcha-row">
+
+                        <div class="captcha-display"
+                             id="captchaDisplay">
+                            7K4P2
+                        </div>
+
+                        <button
+                            type="button"
+                            class="refresh-captcha"
+                            onclick="generateCaptcha()">
+                            🔄
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Enter CAPTCHA
+                    </label>
+
+                    <input
+                        id="captchaInput"
+                        type="text"
+                        placeholder="Enter CAPTCHA"
+                        required
+                    >
+
+                </div>
+
+
+                <button class="primary-btn"
+                        type="submit">
+                    CREATE ACCOUNT
+                </button>
+
+
+                <div class="signup-link">
+
+                    Already have an account?
+
+                    <span onclick="showLoginForm()">
+                        Login
+                    </span>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div class="toast" id="toast">
+    Added to cart!
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function showPage(pageId) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    const page = document.getElementById(pageId);
+
+    if (page) {
+        page.classList.add("active");
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+    if (pageId === "cart") {
+        renderCart();
+    }
+    if (pageId === "restaurantHome") renderRestaurantDashboard();
+    if (pageId === "restaurantProducts") renderRestaurantProducts();
+    if (pageId === "restaurantProfile") renderRestaurantProfile();
+    if (pageId === "restaurantWallet") renderRestaurantWallet();
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+let selectedRole = "Customer";
+
+function openLogin() {
+
+    const overlay = document.getElementById("loginOverlay");
+
+    overlay.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+    document.getElementById("loginIntro").style.display = "flex";
+
+    document.getElementById("loginContent").classList.remove("show");
+
+    setTimeout(() => {
+
+        document.getElementById("loginIntro").style.display = "none";
+
+        document.getElementById("loginContent")
+            .classList.add("show");
+
+    }, 1800);
+}
+
+
+function closeLogin() {
+
+    document.getElementById("loginOverlay")
+        .classList.remove("active");
+
+    document.body.style.overflow = "auto";
+}
+
+
+function selectRole(role) {
+
+    selectedRole = role;
+
+    document.querySelectorAll(".role-card")
+        .forEach(card => {
+            card.classList.remove("selected");
+        });
+
+    if (role === "Customer") {
+        document.getElementById("customerRole")
+            .classList.add("selected");
+    }
+
+    if (role === "Restaurant") {
+        document.getElementById("restaurantRole")
+            .classList.add("selected");
+    }
+
+    if (role === "Delivery Partner") {
+        document.getElementById("deliveryRole")
+            .classList.add("selected");
+    }
+
+    if (role === "Admin") {
+        document.getElementById("adminRole")
+            .classList.add("selected");
+    }
+
+    showToast(role + " login selected");
+}
+
+
+/* =========================================================
+   LOGIN FORM
+========================================================= */
+
+function handleLogin(event) {
+
+    event.preventDefault();
+
+    const mobile =
+        document.getElementById("loginMobile").value;
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    if (!/^[0-9]{10}$/.test(mobile)) {
+
+        showToast("Enter a valid 10-digit mobile number");
+
+        return;
+    }
+
+    if (password.length < 4) {
+
+        showToast("Password must contain at least 4 characters");
+
+        return;
+    }
+
+    showToast("Logging in as " + selectedRole + "...");
+
+    setTimeout(() => {
+
+        closeLogin();
+
+        if (selectedRole === "Customer") {
+
+            showToast("Welcome, Customer!");
+
+        } else if (selectedRole === "Restaurant") {
+
+            showToast("Welcome, Restaurant!");
+            openRestaurantDashboard();
+
+        } else if (selectedRole === "Delivery Partner") {
+
+            showToast("Delivery Partner dashboard coming next!");
+
+        } else {
+
+            showToast("Admin dashboard coming next!");
+
+        }
+
+    }, 1200);
+}
+
+
+function openRestaurantDashboard() {
+    if (!localStorage.getItem("neonbiteRestaurantProfile")) {
+        showPage("restaurantOnboarding");
+        return;
+    }
+    enterRestaurantMode();
+}
+
+let currentRestaurant = null;
+
+function enterRestaurantMode() {
+    currentRestaurant = JSON.parse(localStorage.getItem("neonbiteRestaurantProfile") || "null");
+    if (!currentRestaurant) { showPage("restaurantOnboarding"); return; }
+    document.getElementById("customerLoginButton").classList.add("hidden");
+    document.getElementById("customerProfileButton").classList.add("hidden");
+    document.getElementById("restaurantProfileButton").classList.remove("hidden");
+    document.getElementById("restaurantWelcomeName").innerText = currentRestaurant.name;
+    showPage("restaurantHome");
+    renderRestaurantDashboard();
+}
+
+function saveRestaurantProfile(event) {
+    event.preventDefault();
+    const name = document.getElementById("restaurantNameInput").value.trim();
+    const phone = document.getElementById("restaurantPhoneInput").value.trim();
+    const address = document.getElementById("restaurantAddressInput").value.trim();
+    const lat = parseFloat(document.getElementById("restaurantLatInput").value);
+    const lng = parseFloat(document.getElementById("restaurantLngInput").value);
+    if (!name || !address || !Number.isFinite(lat) || !Number.isFinite(lng) || !/^[0-9]{10}$/.test(phone)) {
+        showToast("Please enter valid restaurant details and coordinates"); return;
+    }
+    const profile = { id:"restaurant_"+Date.now(), name, phone, address, lat, lng,
+        cuisine:document.getElementById("restaurantCuisineInput").value.trim(),
+        hours:document.getElementById("restaurantHoursInput").value.trim(),
+        type:document.getElementById("restaurantTypeInput").value,
+        delivery:document.getElementById("restaurantDeliveryInput").value.trim(),
+        createdAt:new Date().toISOString() };
+    localStorage.setItem("neonbiteRestaurantProfile", JSON.stringify(profile));
+    localStorage.setItem("neonbiteRestaurantProducts", localStorage.getItem("neonbiteRestaurantProducts") || "[]");
+    localStorage.setItem("neonbiteRestaurantOrders", localStorage.getItem("neonbiteRestaurantOrders") || "[]");
+    localStorage.setItem("neonbiteRestaurantWallet", localStorage.getItem("neonbiteRestaurantWallet") || "0");
+    enterRestaurantMode();
+    showToast("Restaurant added successfully!");
+}
+
+function useRestaurantLocation() {
+    if (!navigator.geolocation) { showToast("Location is not supported by this browser"); return; }
+    showToast("Requesting your location...");
+    navigator.geolocation.getCurrentPosition(pos => {
+        document.getElementById("restaurantLatInput").value = pos.coords.latitude.toFixed(7);
+        document.getElementById("restaurantLngInput").value = pos.coords.longitude.toFixed(7);
+        showToast("Latitude and longitude filled");
+    }, () => showToast("Location permission was denied or unavailable"), { enableHighAccuracy:true, timeout:10000 });
+}
+
+function renderRestaurantDashboard() {
+    const products = getRestaurantProducts();
+    const orders = getRestaurantOrders();
+    const wallet = Number(localStorage.getItem("neonbiteRestaurantWallet") || 0);
+    document.getElementById("restaurantOrderCount").innerText = orders.length;
+    document.getElementById("restaurantWalletStat").innerText = "₹" + wallet.toFixed(0);
+    document.getElementById("restaurantProductCount").innerText = products.length;
+    const container = document.getElementById("restaurantOrdersContainer");
+    if (!orders.length) { container.innerHTML = `<div class="no-results"><h2>📭 No orders yet</h2><p>Customer orders for this restaurant will appear here.</p></div>`; return; }
+    container.innerHTML = `<div style="overflow-x:auto"><table class="order-table"><thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Your 70%</th><th>Status</th></tr></thead><tbody>${orders.map(o=>`<tr><td>#${o.id}</td><td>${o.customer||"Customer"}</td><td>${o.items.map(i=>`${i.name} × ${i.quantity}`).join(", ")}</td><td>₹${o.subtotal.toFixed(0)}</td><td>₹${(o.restaurantEarning||0).toFixed(0)}</td><td><span class="status-pill ${o.status==='Completed'?'completed':''}">${o.status}</span></td></tr>`).join("")}</tbody></table></div>`;
+}
+
+function getRestaurantProducts() {
+    return JSON.parse(localStorage.getItem("neonbiteRestaurantProducts") || "[]");
+}
+function getRestaurantOrders() {
+    const profile = JSON.parse(localStorage.getItem("neonbiteRestaurantProfile") || "null");
+    if (!profile) return [];
+    return JSON.parse(localStorage.getItem("neonbiteRestaurantOrders") || "[]").filter(o => o.restaurantId === profile.id);
+}
+
+function addRestaurantProduct(event) {
+    event.preventDefault();
+    const profile = JSON.parse(localStorage.getItem("neonbiteRestaurantProfile") || "null");
+    if (!profile) { showPage("restaurantOnboarding"); return; }
+    const price = Number(document.getElementById("newFoodPrice").value);
+    if (!Number.isFinite(price) || price <= 0) { showToast("Enter a valid price"); return; }
+    const product = { id:"food_"+Date.now(), restaurantId:profile.id, name:document.getElementById("newFoodName").value.trim(), price, category:document.getElementById("newFoodCategory").value, image:document.getElementById("newFoodImage").value.trim() || "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80", description:document.getElementById("newFoodDescription").value.trim() || "Freshly prepared for you.", active:true };
+    const products = getRestaurantProducts(); products.push(product); localStorage.setItem("neonbiteRestaurantProducts", JSON.stringify(products));
+    event.target.reset(); renderRestaurantProducts(); renderRestaurantDashboard(); showToast(product.name + " added. NeonBite fee: ₹" + (price*.30).toFixed(2));
+}
+
+function renderRestaurantProducts() {
+    const profile = JSON.parse(localStorage.getItem("neonbiteRestaurantProfile") || "null");
+    const grid = document.getElementById("restaurantProductGrid"); if (!grid || !profile) return;
+    const products = getRestaurantProducts().filter(p=>p.restaurantId===profile.id);
+    if (!products.length) { grid.innerHTML=`<div class="no-results" style="grid-column:1/-1"><h2>No products yet</h2><p>Add your first food item below.</p></div>`; return; }
+    grid.innerHTML=products.map(p=>`<div class="product-admin-card"><img src="${p.image}" alt="${p.name}"><h3>${p.name}</h3><p>${p.description}</p><div class="product-admin-actions"><div><label style="display:block;color:#777;font-size:12px">Customer price</label><input class="price-editor" type="number" min="1" value="${p.price}" onchange="updateRestaurantProductPrice('${p.id}',this.value)"></div><strong style="color:#087f23">You get ₹${(p.price*.70).toFixed(0)}</strong></div><p style="margin-top:8px">NeonBite 30%: ₹${(p.price*.30).toFixed(0)}</p><button class="remove-btn" style="margin-top:10px" onclick="deleteRestaurantProduct('${p.id}')">Remove product</button></div>`).join("");
+}
+function updateRestaurantProductPrice(id,value){const products=getRestaurantProducts();const p=products.find(x=>x.id===id);if(p){p.price=Number(value)||p.price;localStorage.setItem("neonbiteRestaurantProducts",JSON.stringify(products));renderRestaurantProducts();showToast("Price updated");}}
+function deleteRestaurantProduct(id){const products=getRestaurantProducts().filter(p=>p.id!==id);localStorage.setItem("neonbiteRestaurantProducts",JSON.stringify(products));renderRestaurantProducts();renderRestaurantDashboard();showToast("Product removed");}
+
+function renderRestaurantProfile() {
+    const p=JSON.parse(localStorage.getItem("neonbiteRestaurantProfile")||"null"); if(!p)return;
+    document.getElementById("profileRestaurantName").innerText=p.name; document.getElementById("profileRestaurantCuisine").innerText=p.cuisine+" • "+p.type;
+    document.getElementById("profileRestaurantAddress").innerText=p.address; document.getElementById("profileRestaurantCoordinates").innerText=p.lat+", "+p.lng; document.getElementById("profileRestaurantHours").innerText=p.hours; document.getElementById("profileRestaurantDelivery").innerText=p.delivery;
+}
+
+function renderRestaurantWallet(){
+    const balance=Number(localStorage.getItem("neonbiteRestaurantWallet")||0); document.getElementById("walletBalance").innerText="₹"+balance.toFixed(2);
+    const tx=JSON.parse(localStorage.getItem("neonbiteRestaurantTransactions")||"[]"); const box=document.getElementById("walletTransactions");
+    box.innerHTML=tx.length?tx.slice().reverse().map(t=>`<div class="transaction"><span>${t.label}<br><small style="color:#999">${new Date(t.date).toLocaleString()}</small></span><span class="credit">+₹${Number(t.amount).toFixed(2)}</span></div>`).join(""):"<p style='color:#777;padding:15px 0'>No wallet transactions yet.</p>";
+}
+function showBankForm(){const b=document.getElementById("bankFormContainer");b.classList.toggle("hidden");const bank=JSON.parse(localStorage.getItem("neonbiteBankAccount")||"null");if(bank){document.getElementById("bankHolder").value=bank.holder||"";document.getElementById("bankName").value=bank.bank||"";document.getElementById("bankAccount").value=bank.account||"";document.getElementById("bankIfsc").value=bank.ifsc||"";}}
+function saveBankAccount(e){e.preventDefault();const bank={holder:document.getElementById("bankHolder").value.trim(),bank:document.getElementById("bankName").value.trim(),account:document.getElementById("bankAccount").value.trim(),ifsc:document.getElementById("bankIfsc").value.trim()};localStorage.setItem("neonbiteBankAccount",JSON.stringify(bank));showToast("Bank account linked for this demo");document.getElementById("bankFormContainer").classList.add("hidden");}
+function withdrawWallet(){const balance=Number(localStorage.getItem("neonbiteRestaurantWallet")||0);if(balance<=0){showToast("No balance available to withdraw");return;}if(!localStorage.getItem("neonbiteBankAccount")){showToast("Link a bank account first");showBankForm();return;}showToast("Withdrawal request created for ₹"+balance.toFixed(2));localStorage.setItem("neonbiteRestaurantWallet","0");renderRestaurantWallet();}
+function restaurantLogout(){localStorage.removeItem("neonbiteRestaurantProfile");document.getElementById("restaurantProfileButton").classList.add("hidden");document.getElementById("customerLoginButton").classList.remove("hidden");showPage("home");showToast("Restaurant logged out");}
+
+
+
+/* =========================================================
+   SIGNUP
+========================================================= */
+
+function showSignup() {
+
+    document.getElementById("loginForm")
+        .classList.add("hidden");
+
+    document.getElementById("signupForm")
+        .classList.remove("hidden");
+
+    generateCaptcha();
+}
+
+
+function showLoginForm() {
+
+    document.getElementById("signupForm")
+        .classList.add("hidden");
+
+    document.getElementById("loginForm")
+        .classList.remove("hidden");
+}
+
+
+function handleSignup(event) {
+
+    event.preventDefault();
+
+    const name =
+        document.getElementById("signupName").value.trim();
+
+    const mobile =
+        document.getElementById("signupMobile").value.trim();
+
+    const password =
+        document.getElementById("signupPassword").value;
+
+    const captcha =
+        document.getElementById("captchaInput").value.trim();
+
+    const actualCaptcha =
+        document.getElementById("captchaDisplay").innerText.trim();
+
+
+    if (name.length < 2) {
+
+        showToast("Enter your full name");
+
+        return;
+    }
+
+
+    if (!/^[0-9]{10}$/.test(mobile)) {
+
+        showToast("Enter a valid 10-digit mobile number");
+
+        return;
+    }
+
+
+    if (password.length < 6) {
+
+        showToast("Password must contain at least 6 characters");
+
+        return;
+    }
+
+
+    if (captcha.toUpperCase() !== actualCaptcha.toUpperCase()) {
+
+        showToast("Incorrect CAPTCHA");
+
+        generateCaptcha();
+
+        return;
+    }
+
+
+    showToast("Account created successfully!");
+
+    setTimeout(() => {
+        showLoginForm();
+    }, 1200);
+}
+
+
+/* =========================================================
+   CAPTCHA
+========================================================= */
+
+function generateCaptcha() {
+
+    const characters =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let captcha = "";
+
+    for (let i = 0; i < 5; i++) {
+
+        captcha += characters.charAt(
+            Math.floor(Math.random() * characters.length)
+        );
+
+    }
+
+    document.getElementById("captchaDisplay")
+        .innerText = captcha;
+
+    document.getElementById("captchaInput").value = "";
+}
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+function togglePassword(id, button) {
+
+    const input = document.getElementById(id);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+        button.innerText = "🙈";
+
+    } else {
+
+        input.type = "password";
+        button.innerText = "👁️";
+
+    }
+}
+
+
+/* =========================================================
+   FORGOT PASSWORD
+========================================================= */
+
+function forgotPassword() {
+
+    showToast(
+        "Password recovery will be connected to the backend."
+    );
+}
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+let cart = [];
+
+
+function addToCart(name, price, image) {
+
+    const existing =
+        cart.find(item => item.name === name);
+
+    if (existing) {
+
+        existing.quantity++;
+
+    } else {
+
+        const customProduct = getRestaurantProducts().find(p => p.name === name);
+        cart.push({
+            name: name, price: price, image: image, quantity: 1,
+            restaurantId: customProduct ? customProduct.restaurantId : "demo_restaurant"
+        });
+
+    }
+
+    updateCartCount();
+
+    showToast(name + " added to cart");
+
+}
+
+
+function updateCartCount() {
+
+    const count =
+        cart.reduce(
+            (total,item) =>
+            total + item.quantity,
+            0
+        );
+
+    document.getElementById("cartCount")
+        .innerText = count;
+}
+
+
+function renderCart() {
+
+    const cartContainer =
+        document.getElementById("cartItems");
+
+    if (cart.length === 0) {
+
+        cartContainer.innerHTML = `
+
+            <div class="empty-cart">
+
+                <div class="icon">
+                    🛒
+                </div>
+
+                <h2>
+                    Your cart is empty
+                </h2>
+
+                <p style="color:#777;margin-top:8px;">
+                    Add some delicious food to get started.
+                </p>
+
+                <button
+                    class="checkout-btn"
+                    style="max-width:220px;"
+                    onclick="showPage('menu')">
+
+                    Explore Menu
+
+                </button>
+
+            </div>
+
+        `;
+
+        document.getElementById("subtotal").innerText = "₹0";
+        document.getElementById("tax").innerText = "₹0";
+        document.getElementById("total").innerText = "₹0";
+
+        return;
+    }
+
+
+    cartContainer.innerHTML = "";
+
+
+    let subtotal = 0;
+
+
+    cart.forEach((item,index) => {
+
+        subtotal +=
+            item.price * item.quantity;
+
+
+        const itemHTML = document.createElement("div");
+
+        itemHTML.className = "cart-item";
+
+        itemHTML.innerHTML = `
+
+            <img src="${item.image}" alt="${item.name}">
+
+            <div class="cart-item-info">
+
+                <h3>
+                    ${item.name}
+                </h3>
+
+                <p>
+                    ₹${item.price}
+                </p>
+
+                <div class="quantity">
+
+                    <button onclick="changeQuantity(${index},-1)">
+                        −
+                    </button>
+
+                    <strong>
+                        ${item.quantity}
+                    </strong>
+
+                    <button onclick="changeQuantity(${index},1)">
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    ₹${item.price * item.quantity}
+                </strong>
+
+                <br>
+
+                <button
+                    class="remove-btn"
+                    onclick="removeItem(${index})">
+
+                    Remove
+
+                </button>
+
+            </div>
+
+        `;
+
+        cartContainer.appendChild(itemHTML);
+
+    });
+
+
+    const delivery = subtotal > 0 ? 40 : 0;
+
+    const tax = Math.round(subtotal * .05);
+
+    const total =
+        subtotal + delivery + tax;
+
+
+    document.getElementById("subtotal")
+        .innerText = "₹" + subtotal;
+
+    document.getElementById("deliveryFee")
+        .innerText = "₹" + delivery;
+
+    document.getElementById("tax")
+        .innerText = "₹" + tax;
+
+    document.getElementById("total")
+        .innerText = "₹" + total;
+}
+
+
+function changeQuantity(index, amount) {
+
+    cart[index].quantity += amount;
+
+    if (cart[index].quantity <= 0) {
+
+        cart.splice(index,1);
+
+    }
+
+    updateCartCount();
+
+    renderCart();
+}
+
+
+function removeItem(index) {
+
+    cart.splice(index,1);
+
+    updateCartCount();
+
+    renderCart();
+
+    showToast("Item removed");
+}
+
+
+function checkout() {
+    if (cart.length === 0) { showToast("Your cart is empty"); return; }
+    const customer = JSON.parse(localStorage.getItem("neonbiteCustomerProfile") || "null");
+    if (!customer) { showToast("Please login as a customer before placing an order"); openLogin(); return; }
+
+    const subtotal = cart.reduce((sum,i)=>sum+i.price*i.quantity,0);
+    const restaurantGroups={};
+    cart.forEach(i=>{(restaurantGroups[i.restaurantId||"demo_restaurant"] ||= []).push(i);});
+    let allOrders=JSON.parse(localStorage.getItem("neonbiteRestaurantOrders")||"[]");
+    let customerOrders=JSON.parse(localStorage.getItem("neonbiteCustomerOrders")||"[]");
+    let tx=JSON.parse(localStorage.getItem("neonbiteRestaurantTransactions")||"[]");
+    let wallet=Number(localStorage.getItem("neonbiteRestaurantWallet")||0);
+    const orderGroupId=String(Date.now()).slice(-7);
+
+    Object.entries(restaurantGroups).forEach(([restaurantId,items],groupIndex)=>{
+        const itemTotal=items.reduce((sum,i)=>sum+i.price*i.quantity,0);
+        const restaurantProfile=getAllRestaurantProfiles().find(r=>r.id===restaurantId); const restaurantName=restaurantProfile?.name || items[0]?.restaurantName || (restaurantId==="demo_restaurant" ? "NeonBite Restaurant" : "Restaurant"); const order={id:orderGroupId+(groupIndex?String(groupIndex):""),customer:customer.name||"Customer",customerMobile:customer.mobile,customerAddress:customer.address||"",items:items.map(i=>({...i})),subtotal:itemTotal,status:"New",date:new Date().toISOString(),restaurantId,restaurantName};
+        customerOrders.push(order);
+        if(restaurantId!=="demo_restaurant"){
+            const earning=itemTotal*.70;
+            allOrders.push({...order,restaurantEarning:earning});
+            wallet+=earning;
+            tx.push({label:"Order earnings (70% after 30% NeonBite fee)",amount:earning,date:new Date().toISOString()});
+        }
+    });
+    localStorage.setItem("neonbiteCustomerOrders",JSON.stringify(customerOrders));
+    localStorage.setItem("neonbiteRestaurantOrders",JSON.stringify(allOrders));
+    localStorage.setItem("neonbiteRestaurantWallet",wallet.toFixed(2));
+    localStorage.setItem("neonbiteRestaurantTransactions",JSON.stringify(tx));
+    cart=[]; updateCartCount(); renderCart(); showToast("Order placed successfully!");
+}
+
+
+/* =========================================================
+   MENU FILTER
+========================================================= */
+
+function filterMenu(category, button) {
+
+    document.querySelectorAll(".filter-btn")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+
+    document.querySelectorAll("#menuGrid .food-card")
+        .forEach(card => {
+
+            if (
+                category === "All" ||
+                card.dataset.category === category
+            ) {
+
+                card.style.display = "";
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+}
+
+
+function filterCategory(category) {
+
+    showPage("menu");
+
+    setTimeout(() => {
+
+        const cards =
+            document.querySelectorAll("#menuGrid .food-card");
+
+        let found = false;
+
+        cards.forEach(card => {
+
+            const data =
+                card.dataset.category.toLowerCase();
+
+            const target =
+                category.toLowerCase();
+
+            if (
+                data.includes(target) ||
+                target.includes(data)
+            ) {
+
+                card.style.display = "";
+                found = true;
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+        if (!found) {
+
+            showToast("No matching dishes found");
+
+        }
+
+    }, 100);
+}
+
+
+/* =========================================================
+   OFFERS FILTER
+========================================================= */
+
+function filterOffers(minimum, button) {
+
+    document.querySelectorAll("#offers .filter-btn")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    button.classList.add("active");
+
+
+    document.querySelectorAll(".offer-card")
+        .forEach(card => {
+
+            const discount =
+                parseInt(card.dataset.discount);
+
+
+            if (
+                minimum === "all" ||
+                discount >= parseInt(minimum)
+            ) {
+
+                card.style.display = "";
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+const searchableFoods = [
+
+    {
+        name:"Classic Chicken Burger",
+        category:"Burger",
+        price:199,
+        rating:"4.8",
+        image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        name:"Farmhouse Pizza",
+        category:"Pizza",
+        price:299,
+        rating:"4.7",
+        image:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        name:"Chicken Biryani",
+        category:"Biryani",
+        price:249,
+        rating:"4.9",
+        image:"https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        name:"Chicken Hakka Noodles",
+        category:"Chinese",
+        price:189,
+        rating:"4.6",
+        image:"https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        name:"Paneer Butter Masala",
+        category:"Indian",
+        price:219,
+        rating:"4.7",
+        image:"https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        name:"Masala Dosa",
+        category:"Indian",
+        price:129,
+        rating:"4.8",
+        image:"https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        name:"Chocolate Donut",
+        category:"Dessert",
+        price:99,
+        rating:"4.6",
+        image:"https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        name:"Cold Coffee",
+        category:"Drinks",
+        price:119,
+        rating:"4.5",
+        image:"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=700&q=80"
+    }
+
+];
+
+
+function performHeroSearch() {
+
+    const value =
+        document.getElementById("heroSearch")
+        .value
+        .trim();
+
+    showPage("search");
+
+    document.getElementById("searchInput")
+        .value = value;
+
+    searchFood();
+}
+
+
+function searchFood() {
+
+    const query =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const results =
+        document.getElementById("searchResults");
+
+    const noResults =
+        document.getElementById("noResults");
+
+
+    results.innerHTML = "";
+
+
+    if (query === "") {
+
+        noResults.classList.add("hidden");
+
+        return;
+    }
+
+
+    const matches =
+        searchableFoods.filter(food =>
+
+            food.name.toLowerCase().includes(query) ||
+            food.category.toLowerCase().includes(query)
+
+        );
+
+
+    if (matches.length === 0) {
+
+        noResults.classList.remove("hidden");
+
+        return;
+
+    }
+
+
+    noResults.classList.add("hidden");
+
+
+    matches.forEach(food => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "food-card";
+
+        card.innerHTML = `
+
+            <div class="food-image">
+
+                <img src="${food.image}"
+                     alt="${food.name}">
+
+            </div>
+
+            <div class="food-info">
+
+                <div class="food-name">
+                    ${food.name}
+                </div>
+
+                <div class="rating">
+                    ★ ${food.rating}
+                </div>
+
+                <p class="food-description">
+                    Delicious ${food.category.toLowerCase()}
+                    prepared fresh for you.
+                </p>
+
+                <div class="food-bottom">
+
+                    <div class="price">
+                        ₹${food.price}
+                    </div>
+
+                    <button
+                        class="add-btn"
+                        onclick="addToCart(
+                            '${food.name}',
+                            ${food.price},
+                            '${food.image}'
+                        )">
+
+                        ADD
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+        results.appendChild(card);
+
+    });
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        }, 2500);
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+/* =========================================================
+   RESTAURANT/CUSTOMER PERSISTENT DATA
+========================================================= */
+function getAllRestaurantProfiles(){ return JSON.parse(localStorage.getItem("neonbiteRestaurantProfiles") || "[]"); }
+function getAllRestaurantProducts(){ return JSON.parse(localStorage.getItem("neonbiteRestaurantProducts") || "[]"); }
+function saveAllRestaurantProfiles(list){ localStorage.setItem("neonbiteRestaurantProfiles",JSON.stringify(list)); }
+function currentRestaurantProfile(){ const id=localStorage.getItem("neonbiteActiveRestaurantId"); return getAllRestaurantProfiles().find(r=>r.id===id)||null; }
+function handleLogoClick(){ if(localStorage.getItem("neonbiteRestaurantSession")==="true") showPage("restaurantHome"); else showPage("home"); }
+function renderCustomerRestaurants(){
+ const grid=document.getElementById("customerRestaurantGrid"); if(!grid)return;
+ grid.querySelectorAll("[data-dynamic]").forEach(c=>c.remove());
+ getAllRestaurantProfiles().forEach(r=>{const card=document.createElement("div");card.className="restaurant-card";card.dataset.dynamic="true";card.onclick=()=>openCustomerRestaurant(r.id);card.innerHTML=`<div class="restaurant-image"><img src="${r.image||'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'}"><div class="offer">NEW PARTNER</div></div><div class="restaurant-info"><div class="restaurant-name">${r.name}</div><div class="rating">★ ${r.rating||'New'}</div><div class="food-type">${r.cuisine||'Food'} • ${r.type||'Restaurant'}</div><div class="restaurant-meta">${r.delivery||'25-35 min'} • ${r.address||'Location available'}</div><button class="small-btn" style="margin-top:12px">View Menu</button></div>`;grid.appendChild(card);});
+}
+function openCustomerRestaurant(id){ localStorage.setItem("neonbiteSelectedRestaurantId",id); renderCustomerRestaurantPage(); showPage("customerRestaurant"); }
+function renderCustomerRestaurantPage(){
+ const id=localStorage.getItem("neonbiteSelectedRestaurantId"),r=getAllRestaurantProfiles().find(x=>x.id===id),grid=document.getElementById("customerRestaurantProducts");if(!r||!grid)return;
+ document.getElementById("customerRestaurantName").innerText=r.name;document.getElementById("customerRestaurantMeta").innerText=`${r.cuisine||'Food'} • ${r.delivery||'25-35 min'} • ${r.address||''}`;
+ const products=getAllRestaurantProducts().filter(p=>p.restaurantId===r.id&&p.active!==false);
+ grid.innerHTML=products.length?products.map(p=>`<div class="food-card"><div class="food-image"><img src="${p.image}" alt="${p.name}"></div><div class="food-info"><div class="food-name">${p.name}</div><div class="rating">★ ${r.rating||'New'}</div><p class="food-description">${p.description||'Freshly prepared for you.'}</p><div class="food-bottom"><div class="price">₹${p.price}</div><button class="add-btn" onclick="addToCart('${String(p.name).replace(/'/g,"\\'")}',${p.price},'${p.image}','${p.restaurantId}')">ADD</button></div></div></div>`).join(''):`<div class="no-results" style="grid-column:1/-1"><h2>🍽️ Menu coming soon</h2><p>This restaurant has not added products yet.</p></div>`;
+}
+
+/* =========================================================
+   FIXED RESTAURANT SESSION + CUSTOMER PUBLISHING
+========================================================= */
+function normalizeMobile(mobile){ return String(mobile||"").replace(/\D/g,""); }
+
+function mobileExistsAnywhere(mobile){
+    const target=normalizeMobile(mobile);
+    if(!target) return false;
+    const stores=["neonbiteCustomerAccounts","neonbiteRestaurantAccounts","neonbiteDeliveryAccounts","neonbiteAdminAccounts"];
+    for(const key of stores){
+        try{
+            const accounts=JSON.parse(localStorage.getItem(key)||"[]");
+            if(Array.isArray(accounts) && accounts.some(a=>normalizeMobile(a.mobile||a.phone||a.phoneNumber)===target)) return true;
+        }catch(e){}
+    }
+    const customer=JSON.parse(localStorage.getItem("neonbiteCustomerProfile")||"null");
+    if(customer && normalizeMobile(customer.mobile)===target) return true;
+    const restaurant=JSON.parse(localStorage.getItem("neonbiteRestaurantProfile")||"null");
+    if(restaurant && normalizeMobile(restaurant.phone)===target) return true;
+    return false;
+}
+
+function mobileExistsForRole(mobile, role){
+    const target=normalizeMobile(mobile);
+    if(role==="Customer") return getCustomerAccounts().some(a=>normalizeMobile(a.mobile)===target);
+    if(role==="Restaurant"){
+        const accounts=JSON.parse(localStorage.getItem("neonbiteRestaurantAccounts")||"[]");
+        return accounts.some(a=>normalizeMobile(a.mobile)===target);
+    }
+    return mobileExistsAnywhere(target);
+}
+
+function getCustomerAccounts(){ return JSON.parse(localStorage.getItem("neonbiteCustomerAccounts") || "[]"); }
+function saveCustomerAccounts(list){ localStorage.setItem("neonbiteCustomerAccounts",JSON.stringify(list)); }
+function currentCustomerProfile(){ return JSON.parse(localStorage.getItem("neonbiteCustomerProfile") || "null"); }
+
+function handleLogin(event){
+    event.preventDefault();
+    const mobile=document.getElementById("loginMobile").value.trim();
+    const password=document.getElementById("loginPassword").value;
+    if(!/^[0-9]{10}$/.test(mobile)){showToast("Enter a valid 10-digit mobile number");return;}
+    if(password.length<4){showToast("Password must contain at least 4 characters");return;}
+
+    if(selectedRole!=="Restaurant"){
+        if(selectedRole!=="Customer"){closeLogin();showToast("Welcome, "+selectedRole+"!");return;}
+        const accounts=getCustomerAccounts();
+        const account=accounts.find(a=>a.mobile===mobile);
+        if(account && account.password!==password){showToast("Incorrect password");return;}
+        if(!account){showToast("No customer account found. Please sign up first.");return;}
+        localStorage.setItem("neonbiteCustomerSession","true");
+        localStorage.setItem("neonbiteCustomerProfile",JSON.stringify(account));
+        closeLogin();
+        updateCustomerNavbar();
+        showPage("home");
+        showToast("Welcome back, "+account.name+"!");
+        return;
+    }
+
+    const accounts=JSON.parse(localStorage.getItem("neonbiteRestaurantAccounts")||"[]");
+    let account=accounts.find(a=>normalizeMobile(a.mobile)===normalizeMobile(mobile));
+    if(!account){showToast("No account found for this mobile number. Please sign up first.");return;}
+    if(account.password!==password){showToast("Incorrect restaurant password");return;}
+    localStorage.setItem("neonbiteActiveRestaurantAccountId",account.id);
+    const profiles=getAllRestaurantProfiles();
+    const profile=profiles.find(r=>r.accountId===account.id);
+    localStorage.setItem("neonbiteRestaurantSession","true");
+    if(profile) localStorage.setItem("neonbiteActiveRestaurantId",profile.id);
+    closeLogin();
+    if(profile){ enterRestaurantMode(); showToast("Welcome back, "+profile.name+"!"); }
+    else { showPage("restaurantOnboarding"); showToast("Complete your restaurant details to continue"); }
+}
+
+function handleSignup(event){
+    event.preventDefault();
+    const name=document.getElementById("signupName").value.trim();
+    const mobile=document.getElementById("signupMobile").value.trim();
+    const password=document.getElementById("signupPassword").value;
+    const captcha=document.getElementById("captchaInput").value.trim();
+    const actual=document.getElementById("captchaDisplay").innerText.trim();
+    if(name.length<2){showToast("Enter your full name");return;}
+    if(!/^[0-9]{10}$/.test(mobile)){showToast("Enter a valid 10-digit mobile number");return;}
+    if(password.length<6){showToast("Password must contain at least 6 characters");return;}
+    if(captcha.toUpperCase()!==actual.toUpperCase()){showToast("Incorrect CAPTCHA");generateCaptcha();return;}
+
+    // A mobile number can belong to only ONE NeonBite account, regardless of login platform.
+    if(mobileExistsAnywhere(mobile)){
+        showToast("Mobile number already exists. Please login.");
+        return;
+    }
+
+    if(selectedRole==="Customer"){
+        const accounts=getCustomerAccounts();
+        const account={id:"customer_"+Date.now(),name,mobile,password,address:"",lat:"",lng:"",createdAt:new Date().toISOString()};
+        accounts.push(account); saveCustomerAccounts(accounts);
+        localStorage.setItem("neonbiteCustomerProfile",JSON.stringify(account));
+        localStorage.setItem("neonbiteCustomerSession","true");
+        localStorage.setItem("neonbiteCustomerOrders",localStorage.getItem("neonbiteCustomerOrders")||"[]");
+        closeLogin(); updateCustomerNavbar(); showPage("home");
+        showToast("Account created successfully! Welcome, "+name+"!");
+        return;
+    }
+
+    const accounts=JSON.parse(localStorage.getItem("neonbiteRestaurantAccounts")||"[]");
+    if(selectedRole==="Restaurant"){
+        const account={id:"account_"+Date.now(),name,mobile,password}; accounts.push(account);
+        localStorage.setItem("neonbiteRestaurantAccounts",JSON.stringify(accounts));
+        localStorage.setItem("neonbiteActiveRestaurantAccountId",account.id);
+        localStorage.setItem("neonbiteRestaurantSession","true");
+        closeLogin(); showPage("restaurantOnboarding");
+        showToast("Restaurant account created. Complete your restaurant details.");
+    } else { showToast("Account created successfully!"); setTimeout(showLoginForm,1200); }
+}
+
+function openRestaurantDashboard(){
+    const accountId=localStorage.getItem("neonbiteActiveRestaurantAccountId");
+    const profiles=getAllRestaurantProfiles();
+    const profile=profiles.find(r=>r.accountId===accountId)||currentRestaurantProfile();
+    if(!profile){showPage("restaurantOnboarding");return;}
+    localStorage.setItem("neonbiteActiveRestaurantId",profile.id);
+    localStorage.setItem("neonbiteRestaurantSession","true");
+    enterRestaurantMode();
+}
+
+function enterRestaurantMode(){
+    currentRestaurant=currentRestaurantProfile();
+    if(!currentRestaurant){showPage("restaurantOnboarding");return;}
+    document.getElementById("customerLoginButton").classList.add("hidden");
+    document.getElementById("customerProfileButton").classList.add("hidden");
+    document.getElementById("restaurantProfileButton").classList.remove("hidden");
+    document.getElementById("restaurantWelcomeName").innerText=currentRestaurant.name;
+    showPage("restaurantHome"); renderRestaurantDashboard();
+}
+
+function saveRestaurantProfile(event){
+    event.preventDefault();
+    const accountId=localStorage.getItem("neonbiteActiveRestaurantAccountId");
+    const name=document.getElementById("restaurantNameInput").value.trim();
+    const phone=document.getElementById("restaurantPhoneInput").value.trim();
+    const address=document.getElementById("restaurantAddressInput").value.trim();
+    const lat=parseFloat(document.getElementById("restaurantLatInput").value);
+    const lng=parseFloat(document.getElementById("restaurantLngInput").value);
+    if(!name||!address||!Number.isFinite(lat)||!Number.isFinite(lng)||!/^[0-9]{10}$/.test(phone)){showToast("Please enter valid restaurant details and coordinates");return;}
+    let profiles=getAllRestaurantProfiles();
+    let profile=profiles.find(r=>r.accountId===accountId);
+    if(!profile) profile={id:"restaurant_"+Date.now(),accountId,createdAt:new Date().toISOString()};
+    Object.assign(profile,{name,phone,address,lat,lng,cuisine:document.getElementById("restaurantCuisineInput").value.trim(),hours:document.getElementById("restaurantHoursInput").value.trim(),type:document.getElementById("restaurantTypeInput").value,delivery:document.getElementById("restaurantDeliveryInput").value.trim()});
+    const idx=profiles.findIndex(r=>r.id===profile.id); if(idx>=0)profiles[idx]=profile; else profiles.push(profile);
+    saveAllRestaurantProfiles(profiles);
+    localStorage.setItem("neonbiteActiveRestaurantId",profile.id);
+    localStorage.setItem("neonbiteRestaurantProfile",JSON.stringify(profile));
+    localStorage.setItem("neonbiteRestaurantSession","true");
+    localStorage.setItem("neonbiteRestaurantProducts",localStorage.getItem("neonbiteRestaurantProducts")||"[]");
+    localStorage.setItem("neonbiteRestaurantOrders",localStorage.getItem("neonbiteRestaurantOrders")||"[]");
+    localStorage.setItem("neonbiteRestaurantWallet",localStorage.getItem("neonbiteRestaurantWallet")||"0");
+    enterRestaurantMode(); renderCustomerRestaurants(); showToast("Restaurant published for customers!");
+}
+
+function restaurantLogout(){
+    localStorage.removeItem("neonbiteRestaurantSession");
+    localStorage.removeItem("neonbiteActiveRestaurantId");
+    localStorage.removeItem("neonbiteActiveRestaurantAccountId");
+    document.getElementById("restaurantProfileButton").classList.add("hidden");
+    if(localStorage.getItem("neonbiteCustomerSession")==="true") updateCustomerNavbar();
+    else document.getElementById("customerLoginButton").classList.remove("hidden");
+    showPage("home"); renderCustomerRestaurants(); showToast("Restaurant logged out");
+}
+
+function addToCart(name,price,image,restaurantId){
+    const existing=cart.find(item=>item.name===name && item.restaurantId===restaurantId);
+    if(existing) existing.quantity++;
+    else cart.push({name,price,image,quantity:1,restaurantId:restaurantId||"demo_restaurant"});
+    updateCartCount(); showToast(name+" added to cart");
+}
+
+function addRestaurantProduct(event){
+    event.preventDefault();
+    const profile=currentRestaurantProfile();
+    if(!profile){showPage("restaurantOnboarding");return;}
+    const price=Number(document.getElementById("newFoodPrice").value);
+    if(!Number.isFinite(price)||price<=0){showToast("Enter a valid price");return;}
+    const products=getAllRestaurantProducts();
+    const product={id:"food_"+Date.now(),restaurantId:profile.id,name:document.getElementById("newFoodName").value.trim(),price,category:document.getElementById("newFoodCategory").value,image:document.getElementById("newFoodImage").value.trim()||"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80",description:document.getElementById("newFoodDescription").value.trim()||"Freshly prepared for you.",active:true};
+    products.push(product); localStorage.setItem("neonbiteRestaurantProducts",JSON.stringify(products));
+    event.target.reset(); renderRestaurantProducts(); renderRestaurantDashboard(); renderCustomerRestaurants();
+    showPage("restaurantHome"); showToast(product.name+" added and published to customers!");
+}
+
+function updateCustomerNavbar(){
+    const loggedIn=localStorage.getItem("neonbiteCustomerSession")==="true" && !!currentCustomerProfile();
+    const loginBtn=document.getElementById("customerLoginButton");
+    const profileBtn=document.getElementById("customerProfileButton");
+    const restaurantBtn=document.getElementById("restaurantProfileButton");
+    if(loggedIn){
+        loginBtn.classList.add("hidden"); profileBtn.classList.remove("hidden"); restaurantBtn.classList.add("hidden");
+    } else if(localStorage.getItem("neonbiteRestaurantSession")!=="true"){
+        loginBtn.classList.remove("hidden"); profileBtn.classList.add("hidden");
+    }
+}
+
+function openCustomerProfile(){
+    if(!currentCustomerProfile()){openLogin();return;}
+    showPage("customerProfile");
+}
+
+function getRestaurantNameForOrder(order){
+    if(order.restaurantName) return order.restaurantName;
+    if(order.restaurantId && order.restaurantId !== "demo_restaurant"){
+        const r=getAllRestaurantProfiles().find(x=>x.id===order.restaurantId);
+        if(r) return r.name || "Restaurant";
+    }
+    return "NeonBite Restaurant";
+}
+
+function orderAgain(orderId){
+    const orders=JSON.parse(localStorage.getItem("neonbiteCustomerOrders")||"[]");
+    const order=orders.find(o=>String(o.id)===String(orderId));
+    if(!order || !Array.isArray(order.items) || !order.items.length){
+        showToast("This order cannot be added again");
+        return;
+    }
+    order.items.forEach(item=>{
+        addToCart(item.name,Number(item.price)||0,item.image||"",item.restaurantId||"demo_restaurant");
+    });
+    showPage("cart");
+    showToast("Previous order added to your cart");
+}
+
+function renderCustomerProfile(){
+    const p=currentCustomerProfile();
+    if(!p)return;
+    document.getElementById("customerProfileName").innerText=p.name||"Customer";
+    document.getElementById("customerProfileMobile").innerText=p.mobile||"";
+    document.getElementById("customerNameInput").value=p.name||"";
+    document.getElementById("customerMobileInput").value=p.mobile||"";
+    document.getElementById("customerAddressInput").value=p.address||"";
+    document.getElementById("customerLatInput").value=p.lat||"";
+    document.getElementById("customerLngInput").value=p.lng||"";
+    const initial=(p.name||"C").trim().charAt(0).toUpperCase();
+    document.getElementById("customerAvatar").innerText=initial||"C";
+    const orders=JSON.parse(localStorage.getItem("neonbiteCustomerOrders")||"[]").slice().reverse();
+    document.getElementById("customerTotalOrders").innerText=orders.length;
+    document.getElementById("customerAddressStatus").innerText=p.address?"Saved":"Not set";
+    const box=document.getElementById("customerRecentOrders");
+    if(!orders.length){box.innerHTML='<div class="customer-empty">📭 No orders yet. Your recent orders will appear here.</div>';return;}
+    box.innerHTML=orders.slice(0,8).map(o=>`<div class="customer-order-item"><div class="customer-order-restaurant">🍽️ ${getRestaurantNameForOrder(o)}</div><div class="customer-order-top"><strong>#${o.id}</strong><strong>₹${Number(o.subtotal||0).toFixed(0)}</strong></div><div class="customer-order-items">${(o.items||[]).map(i=>`${i.name} × ${i.quantity}`).join(", ")}<br>📅 ${new Date(o.date).toLocaleString()} · ${o.status||"New"}</div><div class="customer-order-actions"><button class="order-again-btn" onclick="orderAgain('${o.id}')">🔄 Order Again</button></div></div>`).join("");
+}
+
+function saveCustomerProfile(event){
+    event.preventDefault();
+    const p=currentCustomerProfile(); if(!p)return;
+    p.name=document.getElementById("customerNameInput").value.trim();
+    p.address=document.getElementById("customerAddressInput").value.trim();
+    p.lat=document.getElementById("customerLatInput").value.trim();
+    p.lng=document.getElementById("customerLngInput").value.trim();
+    if(p.name.length<2){showToast("Enter your full name");return;}
+    localStorage.setItem("neonbiteCustomerProfile",JSON.stringify(p));
+    const accounts=getCustomerAccounts(); const i=accounts.findIndex(a=>a.id===p.id);
+    if(i>=0){accounts[i]={...accounts[i],...p};saveCustomerAccounts(accounts);}
+    updateCustomerNavbar(); renderCustomerProfile(); showToast("Profile updated successfully!");
+}
+
+function useCustomerLocation(){
+    if(!navigator.geolocation){showToast("Location is not supported by this browser");return;}
+    showToast("Requesting your location...");
+    navigator.geolocation.getCurrentPosition(pos=>{
+        document.getElementById("customerLatInput").value=pos.coords.latitude.toFixed(7);
+        document.getElementById("customerLngInput").value=pos.coords.longitude.toFixed(7);
+        showToast("Location saved. Click SAVE PROFILE to keep it.");
+    },()=>showToast("Location permission was denied or unavailable"),{enableHighAccuracy:true,timeout:10000});
+}
+
+function customerLogout(){
+    localStorage.removeItem("neonbiteCustomerSession");
+    localStorage.removeItem("neonbiteCustomerProfile");
+    document.getElementById("customerProfileButton").classList.add("hidden");
+    document.getElementById("customerLoginButton").classList.remove("hidden");
+    showPage("home"); showToast("Logged out successfully");
+}
+
+function showPage(pageId){
+    document.querySelectorAll(".page").forEach(page=>page.classList.remove("active"));
+    const page=document.getElementById(pageId); if(page)page.classList.add("active");
+    window.scrollTo({top:0,behavior:"smooth"});
+    if(pageId==="cart")renderCart();
+    if(pageId==="restaurantHome")renderRestaurantDashboard();
+    if(pageId==="restaurantProducts")renderRestaurantProducts();
+    if(pageId==="restaurantProfile")renderRestaurantProfile();
+    if(pageId==="restaurantWallet")renderRestaurantWallet();
+    if(pageId==="customerProfile")renderCustomerProfile();
+    if(pageId==="customerRestaurant")renderCustomerRestaurantPage();
+    if(pageId==="home")renderCustomerRestaurants();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    updateCartCount();
+    generateCaptcha();
+    renderCustomerRestaurants();
+    if(localStorage.getItem("neonbiteRestaurantSession")==="true") enterRestaurantMode();
+    else updateCustomerNavbar();
+});
+
+</script>
+
+</body>
+</html>
